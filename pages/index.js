@@ -1,16 +1,29 @@
-import {Box, Paper, Typography} from "@mui/material";
+import {Box} from "@mui/material";
+
+import {useSelector} from "react-redux";
+import LoginFormComponent from "../components/loginFormComponent";
+import Router from "next/router";
+import {useEffect, useState} from "react";
+
+import LinearProgress from '@mui/material/LinearProgress';
 
 export default function Home() {
+    const {user, token} = useSelector(state => state.userInfo)
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        if (token) {
+            Router.push('/services')
+        } else
+            setLoading(false)
+    }, [token])
+
     return (
         <>
-            <Box width='100%' height='100vh' display='flex' justifyContent='center' alignItems='center'>
-                <Box width='759px' height='431px' component={Paper} display='flex' justifyContent='center'
-                     alignItems='center'>
-                    <Typography>
-                        Login Page
-                    </Typography>
+            {loading ? <LinearProgress/> :
+                <Box width='100%' height='100vh' display='flex' justifyContent='center' alignItems='center'>
+                    <LoginFormComponent/>
                 </Box>
-            </Box>
+            }
         </>
     );
 }

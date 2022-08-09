@@ -1,5 +1,5 @@
-import { createTheme } from '@mui/material/styles';
-import { red } from '@mui/material/colors';
+import {createTheme} from '@mui/material/styles';
+import {red} from '@mui/material/colors';
 
 // Create a theme instance.
 const theme = createTheme({
@@ -13,6 +13,9 @@ const theme = createTheme({
         error: {
             main: red.A400,
         },
+    },
+    typography: {
+        fontFamily: '"Poppins", sans-serif '
     },
 });
 
