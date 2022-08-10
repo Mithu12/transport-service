@@ -17,9 +17,27 @@ export const userApi = createApi({
     endpoints: (builder) => ({
         login: builder.mutation({
             query: (body) => ({
-                url: `auth/login`, method: 'POST', body, headers: {}
+                url: `auth/login`, method: 'POST', body,
             }),
             providesTags: ['Users'],
+            transformResponse(response, meta, arg) {
+                return response.data
+            }
+        }),
+        getFilterData: builder.query({
+            query: () => ({
+                url: `company/filter-management/get-filters`, method: 'GET',
+            }),
+            providesTags: ['Filters'],
+            transformResponse(response, meta, arg) {
+                return response.data
+            }
+        }),
+        addNewFilter: builder.mutation({
+            query: (body) => ({
+                url: `company/filter-management/add`, method: 'POST', body
+            }),
+            // invalidatesTags: ['Filters'],
             transformResponse(response, meta, arg) {
                 return response.data
             }
@@ -31,5 +49,5 @@ export const userApi = createApi({
 
 
 export const {
-    useLoginMutation,
+    useLoginMutation, useGetFilterDataQuery, useAddNewFilterMutation
 } = userApi
