@@ -19,11 +19,12 @@ import {
     Radio, Stack,
     TextField
 } from "@mui/material";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
-export default function SelectInputComponent({label, values, stateName, setInfo}) {
+export default function SelectInputComponent({label, values, stateName, setInfo, currentValue}) {
     const [open, setOpen] = React.useState(false);
     const [selectedValue, setSelectedValue] = useState(0);
+    const [selection, setSelection] = useState('');
 
     const handleChange = (v) => {
         setSelectedValue(v.id)
@@ -39,9 +40,22 @@ export default function SelectInputComponent({label, values, stateName, setInfo}
 
     const submit = () => {
         setInfo(stateName, selectedValue)
+        const s = values.find(v => v.id === selectedValue)
+        setSelection(s.title)
         handleClose()
     }
 
+    useEffect(() => {
+        setSelectedValue(currentValue)
+        const s = values.find(v => v.id === currentValue)
+        setSelection(s?.title)
+        setInfo(stateName, currentValue)
+    }, [currentValue]);
+
+
+
+    // console.log({currentValue, selectedValue})
+    // console.log(selection)
     return (
         <div>
             {/*<Button onClick={handleClickOpen}>Open select dialog</Button>*/}
@@ -61,7 +75,7 @@ export default function SelectInputComponent({label, values, stateName, setInfo}
                 disablePadding
             >
                 <ListItemButton role={undefined} dense>
-                    <ListItemText sx={{color: '#9E9E9E'}} id={1} primary={label}/>
+                    <ListItemText sx={{color: '#9E9E9E'}} id={1} primary={selection ? selection : label}/>
                 </ListItemButton>
             </ListItem>
 
