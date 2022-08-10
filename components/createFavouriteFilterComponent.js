@@ -25,15 +25,15 @@ function CreateFavouriteFilterComponent({closeFilterCreate}) {
             name: newFilterData.title,
             transportation_type_id: newFilterData.transportationType,
             request_type: newFilterData.requestType,
-            city: newFilterData.city
+            city: JSON.stringify(newFilterData.city)
         })
         closeFilterCreate()
     }
 
     const allRequestType = ['Simple Delivery', 'Advanced Delivery']
     const {data} = useGetFilterDataQuery()
-    console.log(data)
-    console.log(newFilterData)
+    // console.log(data)
+    // console.log(JSON.stringify(newFilterData.city))
     return (
         <Box display='flex' flexDirection='column'>
             <Typography sx={{fontWeight: 600, fontSize: '18px'}}>
