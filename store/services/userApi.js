@@ -60,6 +60,15 @@ export const userApi = createApi({
                 return response.data
             }
         }),
+        searchByFilter: builder.query({
+            query: (body) => ({
+                url: `company/cloud-request/request-search`, method: 'POST', body
+            }),
+            // invalidatesTags: ['Filters'],
+            transformResponse(response, meta, arg) {
+                return response.data
+            }
+        }),
 
     }),
 
@@ -67,5 +76,10 @@ export const userApi = createApi({
 
 
 export const {
-    useLoginMutation, useGetFilterDataQuery, useAddNewFilterMutation, useUpdateFilterMutation, useDeleteFilterMutation
+    useLoginMutation,
+    useGetFilterDataQuery,
+    useAddNewFilterMutation,
+    useUpdateFilterMutation,
+    useDeleteFilterMutation,
+    useSearchByFilterQuery
 } = userApi

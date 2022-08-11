@@ -1,9 +1,32 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Button, Stack, TextField, Typography} from "@mui/material";
 import {useGetFilterDataQuery} from "../store/services/userApi";
+import {useRouter} from "next/router";
 
 const FilterPageLeftBoxComponent = ({filterDetails}) => {
     const {data: {filters}} = useGetFilterDataQuery()
+    const [search, setSearch] = useState('');
+    const [allFilters, setAllFilters] = useState([]);
+    const selectFilter = (id) => {
+        filterDetails(id)
+    }
+    const router = useRouter()
+    const searchHandler = (val) => {
+        setSearch(val)
+    }
+    useEffect(() => {
+        if (filters)
+            setAllFilters(filters)
+    }, [filters]);
+
+    useEffect(() => {
+        // if (search) {
+        const filteredData = filters.filter(v => (v.name.includes(search)))
+        setAllFilters(filteredData)
+        // }
+    }, [search]);
+
+
     return (
         <Box width='30%' bgcolor="#fff" height='75vh' marginRight='30px' borderRadius='10px'>
             <Box sx={{m: '20px',}}>
@@ -11,11 +34,9 @@ const FilterPageLeftBoxComponent = ({filterDetails}) => {
                     <TextField
                         id="outlined-start-adornment"
                         sx={{background: '#F8F8F8', width: "80%"}}
-                        // fullWidth
                         size='small'
                         placeholder='Search'
-                        // value={values.email}
-                        // onChange={handleChange('email')}
+                        onChange={e => searchHandler(e.target.value)}
                     />
                     <Button sx={{width: '8%'}}>
                         <svg width="100%" height="30"
@@ -30,12 +51,18 @@ const FilterPageLeftBoxComponent = ({filterDetails}) => {
 
                 </Box>
                 {
-                    filters.map(f => {
+                    allFilters.map(f => {
                         return <>
                             {/*<Stack spacing={3} direction='column'>*/}
                             <Box key={f.id}
-                                 sx={{background: '#F4FAFF', padding: '13px 14px', mb: '16px', cursor: 'pointer'}}
-                                 onClick={() => filterDetails(f.id)}>
+                                 sx={{
+                                     background: '#F4FAFF',
+                                     padding: '13px 14px',
+                                     mb: '16px',
+                                     cursor: 'pointer',
+                                     borderLeft: Number(router.query.selected) === f.id ? '3px solid #47A7FF' : ''
+                                 }}
+                                 onClick={() => selectFilter(f.id)}>
                                 <Typography sx={{fontWeight: 600, fontSize: '14px'}}>
                                     {f.name}
                                 </Typography>

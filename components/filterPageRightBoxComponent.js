@@ -1,22 +1,45 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Button, Typography} from "@mui/material";
 import CreateFavouriteFilterComponent from "./createFavouriteFilterComponent";
 import FavouriteFilterListComponent from "./FavouriteFilterListComponent";
 import FilterDetailsComponent from "./filterDetailsComponent";
+import {useRouter} from "next/router";
+import SearchResultComponent from "./searchResultComponent";
 
-function FilterPageRightBoxComponent({transportation_types, cities, selectedFilterId}) {
-    const [createFilter, setCreateFilter] = useState(true);
-    const changeFilterCreateState = () => {
-        setCreateFilter(state => !state)
+function FilterPageRightBoxComponent({}) {
+    const router = useRouter()
+
+    const {manage, selected, newF, result} = router.query
+    console.log(manage, selected)
+
+    const closeFilterCreate = () => {
+        router.push({
+            pathName: 'services',
+            query: {}
+        })
     }
-    // console.log(selectedFilterId)
+    const openFilterCreate = () => {
+        router.push({
+            pathName: 'services',
+            query: {newF: 1}
+        })
+    }
     return (
         <Box width='68%' bgcolor="#fff" height='75vh' borderRadius='10px' padding='20px'>
-            {selectedFilterId ? <FilterDetailsComponent filter={selectedFilterId}/> :
-                createFilter ? <CreateFavouriteFilterComponent closeFilterCreate={changeFilterCreateState}/> :
-                    <FavouriteFilterListComponent addFilter={changeFilterCreateState}/>
+            {manage && !selected ?
+                <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column' height='100%'>
+                    <Box>
+                        <Typography sx={{color: '#9E9E9E', fontSize: '18px', fontStyle: 'italic', fontWeight: 600}}>
+                            Please select a filter to manage.
+                        </Typography>
+                    </Box>
+                </Box> : ''}
+            {manage && selected ? <FilterDetailsComponent filter={selected}/> : ''}
+            {result && selected ? <SearchResultComponent filter={selected}/> : ''}
+            {newF ? <CreateFavouriteFilterComponent closeFilterCreate={closeFilterCreate}/> : ''}
+            {
+                !manage && !newF && !result && <FavouriteFilterListComponent addFilter={openFilterCreate}/>
             }
-
         </Box>
     );
 }

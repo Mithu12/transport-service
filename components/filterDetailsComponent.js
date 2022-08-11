@@ -14,15 +14,12 @@ import {
     useDeleteFilterMutation
 } from "../store/services/userApi";
 import DeleteDialog from "./deleteDialog";
+import {useRouter} from "next/router";
 
 function FilterDetailsComponent({filter}) {
-    const [filterData, setFilterData] = useState({
-        title: filter.name,
-        requestType: filter.request_type,
-        transportationType: filter.transportation_type_id,
-        city: filter.city,
-    });
+    const [filterData, setFilterData] = useState({});
 
+    const router = useRouter()
 
     const {data} = useGetFilterDataQuery()
     const [updateData] = useUpdateFilterMutation()
@@ -35,13 +32,6 @@ function FilterDetailsComponent({filter}) {
         setFilterData(state => ({...state, [name]: data}))
     }
     const updateFilter = async () => {
-        console.log({
-            id: filter,
-            name: filterData.title,
-            transportation_type_id: filterData.transportationType,
-            request_type: filterData.requestType,
-            city: JSON.stringify(filterData.city)
-        })
         updateData({
             id: filter,
             name: filterData.title,
@@ -52,30 +42,32 @@ function FilterDetailsComponent({filter}) {
         // closeFilterCreate()
     }
     const deleteFilter = async () => {
-        // console.log(filter)
         await deleteData({id: filter})
         setOpen(false)
+        router.push({
+            pathName: 'services',
+            query: {manage: 1}
+        })
     }
 
     const allRequestType = ['Simple Delivery', 'Advanced Delivery']
 
 
     useEffect(() => {
-        const selectedFilter = data.filters.find(f => f.id === filter)
-        setFilterData({
-            title: selectedFilter.name,
-            requestType: selectedFilter.request_type,
-            transportationType: selectedFilter.typeoftransportations_id,
-            city: selectedFilter.city,
-        })
+        const selectedFilter = data.filters.find(f => f.id === Number(filter))
+        if (selectedFilter)
+            setFilterData({
+                title: selectedFilter.name,
+                requestType: selectedFilter.request_type,
+                transportationType: selectedFilter.typeoftransportations_id,
+                city: selectedFilter.city,
+            })
     }, [filter]);
 
-    console.log(filterData)
-    // console.log(JSON.stringify(filterData.city))
     return (
         <Box display='flex' flexDirection='column'>
             <Typography sx={{fontWeight: 600, fontSize: '18px'}}>
-                Create Favorite Filter
+                Favorite Filter
             </Typography>
 
             <Box>
@@ -99,7 +91,6 @@ function FilterDetailsComponent({filter}) {
             </Box>
             <Box sx={{mb: '40px'}}>
 
-                {/*<List sx={{width: '100%', bgcolor: 'background.paper'}} f>*/}
                 <Box>
                     <Typography sx={{fontWeight: 600, fontSize: '14px', mt: '20px', color: '#454545', mb: '5px'}}>Request
                         Type</Typography>
@@ -107,7 +98,6 @@ function FilterDetailsComponent({filter}) {
                                             data={allRequestType} currentValue={filterData.requestType}/>
                 </Box>
 
-                {/*</List>*/}
                 <Box>
                     <Typography sx={{fontWeight: 600, fontSize: '14px', mt: '20px', color: '#454545', mb: '5px'}}>Transportation
                         Type</Typography>
