@@ -60,9 +60,11 @@ const FilterPageLeftBoxComponent = ({filterDetails}) => {
                                      padding: '13px 14px',
                                      mb: '16px',
                                      cursor: 'pointer',
-                                     borderLeft: Number(router.query.selected) === f.id ? '3px solid #47A7FF' : ''
+                                     borderLeft: Number(router.query.selected) === f.id ? '3px solid #47A7FF' : '',
+                                     borderRadius:'5px'
                                  }}
                                  onClick={() => selectFilter(f.id)}>
+
                                 <Typography sx={{fontWeight: 600, fontSize: '14px'}}>
                                     {f.name}
                                 </Typography>
