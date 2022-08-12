@@ -34,14 +34,14 @@ export default function SelectInputComponent({label, values, stateName, setInfo,
     const submit = () => {
         setInfo(stateName, selectedValue)
         const s = values.find(v => v.id === selectedValue)
-        setSelection(s.title)
+        setSelection(s.title ? s?.title : s?.name)
         handleClose()
     }
 
     useEffect(() => {
         setSelectedValue(currentValue)
         const s = values.find(v => v.id === currentValue)
-        setSelection(s?.title)
+        setSelection(s?.title ? s.title : s?.name)
         setInfo(stateName, currentValue)
     }, [currentValue]);
 
@@ -93,12 +93,12 @@ export default function SelectInputComponent({label, values, stateName, setInfo,
                                         secondaryAction={
                                             <IconButton edge="end" aria-label="comments">
                                                 <Radio checked={selectedValue === v.id}/>
-                                          </IconButton>
+                                            </IconButton>
                                         }
                                         disablePadding
                                     >
                                         <ListItemButton role={undefined} dense>
-                                            <ListItemText id={i} primary={v.title}/>
+                                            <ListItemText id={i} primary={v.title ? v.title : v.name}/>
                                         </ListItemButton>
                                     </ListItem>
                                 })

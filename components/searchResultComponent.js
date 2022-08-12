@@ -1,11 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useSearchByFilterQuery} from "../store/services/userApi";
-import {Box, Button, Chip, Divider, IconButton, InputBase, Paper, Stack, TextField, Typography} from "@mui/material";
+import {
+    Box,
+    Chip,
+    CircularProgress,
+    IconButton,
+    InputBase,
+    Typography
+} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import LinearProgress from "@mui/material/LinearProgress";
 
 function SearchResultComponent() {
-    const {data} = useSearchByFilterQuery()
+    const [searchData, setSearchData] = useState({
+        search_type: 'search',
+        search_text: ''
+    });
+    const {data, isLoading, isFetching} = useSearchByFilterQuery(searchData)
+    // console.log(isLoading)
     return (
         <Box>
             <Box display='flex' flexDirection='column'>
@@ -23,7 +35,7 @@ function SearchResultComponent() {
                             sx={{ml: 1, flex: 1, width: '280px',}}
                             placeholder="Search Google Maps"
                             inputProps={{'aria-label': 'search google maps'}}
-
+                            onChange={(e) => setSearchData(state => ({...state, search_text: e.target.value}))}
                         />
                         <IconButton type="submit" sx={{p: '10px'}} aria-label="search">
                             <SearchIcon/>
@@ -43,7 +55,10 @@ function SearchResultComponent() {
                 </Box>
 
             </Box>
-            {data && data.map(d => {
+            {(isLoading || isFetching) &&
+                <Box display='flex' height='500px' justifyContent='center'
+                     alignItems='center'><CircularProgress/></Box>}
+            {!(isLoading || isFetching) && data && data.map(d => {
                 return <Box key={d.id}
                             sx={{
                                 background: '#F4FAFF',

@@ -2,15 +2,18 @@ import React, {useEffect, useState} from 'react';
 import {Box, Button, Stack, TextField, Typography} from "@mui/material";
 import {useGetFilterDataQuery} from "../store/services/userApi";
 import {useRouter} from "next/router";
+import SearchFilterDialog from "./searchFilterDialog";
 
 const FilterPageLeftBoxComponent = ({filterDetails}) => {
     const {data: {filters}} = useGetFilterDataQuery()
     const [search, setSearch] = useState('');
+    const [filterDialog, setFilterDialog] = useState(false);
     const [allFilters, setAllFilters] = useState([]);
     const selectFilter = (id) => {
         filterDetails(id)
     }
     const router = useRouter()
+
     const searchHandler = (val) => {
         setSearch(val)
     }
@@ -27,8 +30,17 @@ const FilterPageLeftBoxComponent = ({filterDetails}) => {
     }, [search]);
 
 
+    const filterButtonHandler = () => {
+        setFilterDialog(true)
+    }
+    const handleClose = () => {
+        setFilterDialog(false)
+    }
+
+
     return (
         <Box width='30%' bgcolor="#fff" height='75vh' marginRight='30px' borderRadius='10px'>
+            <SearchFilterDialog show={filterDialog} handleClose={handleClose}/>
             <Box sx={{m: '20px',}}>
                 <Box sx={{display: 'flex', mb: '24px'}} justifyContent={'space-between'}>
                     <TextField
@@ -38,7 +50,7 @@ const FilterPageLeftBoxComponent = ({filterDetails}) => {
                         placeholder='Search'
                         onChange={e => searchHandler(e.target.value)}
                     />
-                    <Button sx={{width: '8%'}}>
+                    <Button sx={{width: '8%'}} onClick={filterButtonHandler}>
                         <svg width="100%" height="30"
                              viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd"
@@ -61,7 +73,7 @@ const FilterPageLeftBoxComponent = ({filterDetails}) => {
                                      mb: '16px',
                                      cursor: 'pointer',
                                      borderLeft: Number(router.query.selected) === f.id ? '3px solid #47A7FF' : '',
-                                     borderRadius:'5px'
+                                     borderRadius: '5px'
                                  }}
                                  onClick={() => selectFilter(f.id)}>
 
@@ -75,7 +87,6 @@ const FilterPageLeftBoxComponent = ({filterDetails}) => {
                                     {f.city?.join(',')}
                                 </Typography>
                             </Box>
-                            {/*</Stack>*/}
                         </>
                     })
                 }
