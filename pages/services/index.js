@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, TextField} from "@mui/material";
+import {Box, Button} from "@mui/material";
 import FilterPageLeftBoxComponent from "../../components/filterPageLeftBoxComponent";
 import FilterPageRightBoxComponent from "../../components/filterPageRightBoxComponent";
 import {useSelector} from "react-redux";

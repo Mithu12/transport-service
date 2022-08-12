@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {Box, Button, Typography} from "@mui/material";
 import {useGetFilterDataQuery} from "../store/services/userApi";
 

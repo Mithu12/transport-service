@@ -101,7 +101,7 @@ function SearchResultComponent() {
                 </Box>
                 <Box sx={{mb: '20px'}}>
                     <Box display='flex' flexWrap='wrap' gap={2}>
-                        {Object.keys(filterInfo).map(k => {
+                        {Object.keys(filterInfo)?.map(k => {
                             let chipData = ''
                             let chipProp = k
                             if (k === 'city') {

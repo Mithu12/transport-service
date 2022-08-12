@@ -47,7 +47,7 @@ function CheckboxInputComponent({label, setInfo, data, stateName, currentValue})
                 setSelection('')
             }
         } else {
-            let selectedData = Object.keys(selectedValue).filter(v => {
+            let selectedData = Object.keys(selectedValue)?.filter(v => {
                 if (selectedValue[v]) {
                     return v
                 }

@@ -8,7 +8,6 @@ import {
 import SelectInputComponent from "./selectInputComponent";
 import CheckboxInputComponent from "./checkboxInputComponent";
 import {
-    useAddNewFilterMutation,
     useGetFilterDataQuery,
     useUpdateFilterMutation,
     useDeleteFilterMutation
@@ -53,7 +52,7 @@ function FilterDetailsComponent({filter}) {
 
 
     useEffect(() => {
-        const selectedFilter = data.filters.find(f => f.id === Number(filter))
+        const selectedFilter = data.filters?.find(f => f.id === Number(filter))
         if (selectedFilter)
             setFilterData({
                 title: selectedFilter.name,

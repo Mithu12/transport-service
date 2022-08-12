@@ -1,6 +1,6 @@
 import React from 'react';
 import DialogTitle from "@mui/material/DialogTitle";
-import {Checkbox, DialogContentText, IconButton, ListItem, ListItemButton, ListItemText, Stack} from "@mui/material";
+import { DialogContentText} from "@mui/material";
 import DialogContent from "@mui/material/DialogContent";
 import Box from "@mui/material/Box";
 import DialogActions from "@mui/material/DialogActions";

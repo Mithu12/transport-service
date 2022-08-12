@@ -33,7 +33,7 @@ export default function SelectInputComponent({label, values, stateName, setInfo,
 
     const submit = () => {
         setInfo(stateName, selectedValue)
-        const s = values.find(v => v.id === selectedValue)
+        const s = values?.find(v => v.id === selectedValue)
         setSelection(s.title ? s?.title : s?.name)
         handleClose()
     }
@@ -41,7 +41,7 @@ export default function SelectInputComponent({label, values, stateName, setInfo,
     useEffect(() => {
         if (currentValue) {
             setSelectedValue(currentValue)
-            const s = values.find(v => v.id === currentValue)
+            const s = values?.find(v => v.id === currentValue)
             setSelection(s?.title ? s.title : s?.name)
             setInfo(stateName, currentValue, s?.title)
         }

@@ -50,7 +50,7 @@ function SearchFilterDialog({handleClose, show}) {
     };
 
     useEffect(() => {
-        const selected = data.filters.find(d => d.id === filterData.selectedFilter)
+        const selected = data.filters?.find(d => d.id === filterData.selectedFilter)
         if (selected)
             setFilterData(state => ({
                 ...state,

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, CircularProgress, Stack, TextField, Typography} from "@mui/material";
+import {Box, Button, CircularProgress, TextField, Typography} from "@mui/material";
 import {useGetFilterDataQuery} from "../store/services/userApi";
 import {useRouter} from "next/router";
 import SearchFilterDialog from "./searchFilterDialog";
@@ -23,7 +23,7 @@ const FilterPageLeftBoxComponent = ({filterDetails}) => {
     }, [filters]);
 
     useEffect(() => {
-        const filteredData = filters.filter(v => (v.name.includes(search)))
+        const filteredData = filters?.filter(v => (v.name.includes(search)))
         setAllFilters(filteredData)
     }, [search]);
 
@@ -63,7 +63,7 @@ const FilterPageLeftBoxComponent = ({filterDetails}) => {
                 {
                     isLoading || isFetching ? <CircularProgress/> :
 
-                        allFilters.map(f => {
+                        allFilters?.map(f => {
                             return <>
                                 {/*<Stack spacing={3} direction='column'>*/}
                                 <Box key={f.id}
