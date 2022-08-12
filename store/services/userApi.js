@@ -19,7 +19,7 @@ export const userApi = createApi({
             query: (body) => ({
                 url: `auth/login`, method: 'POST', body,
             }),
-            providesTags: ['Users'],
+            invalidatesTags: ['Filters'],
             transformResponse(response, meta, arg) {
                 return response.data
             }
