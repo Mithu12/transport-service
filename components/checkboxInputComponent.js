@@ -1,10 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import FormControl from "@mui/material/FormControl";
 import {
     Checkbox,
-    FormControlLabel,
-    FormGroup,
-    FormLabel,
     IconButton, ListItem,
     ListItemButton,
     ListItemText, Stack
@@ -13,9 +9,6 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 
@@ -31,13 +24,10 @@ function CheckboxInputComponent({label, setInfo, data, stateName, currentValue})
     const handleClickOpen = () => {
         setOpen(true);
     };
-    // console.log(currentValue)
 
     const handleClose = () => {
         setOpen(false);
     };
-    // console.log(currentValue)
-    // console.log(selectedValue)
     const submit = () => {
         if (stateName === 'requestType') {
             if (selectedValue['SimpleDelivery'] && selectedValue['AdvancedDelivery']) {
@@ -72,8 +62,7 @@ function CheckboxInputComponent({label, setInfo, data, stateName, currentValue})
         if (stateName === 'requestType') {
             if (currentValue === 'simple_and_advance') {
                 setSelectedValue({SimpleDelivery: true, AdvancedDelivery: true})
-                // selectedValue['SimpleDelivery'] && selectedValue['AdvancedDelivery']
-                setInfo(stateName, 'simple_and_advance')
+               setInfo(stateName, 'simple_and_advance')
                 setSelection('simple and advance')
             } else if (currentValue === 'simple') {
                 setSelectedValue({SimpleDelivery: true})
@@ -89,12 +78,10 @@ function CheckboxInputComponent({label, setInfo, data, stateName, currentValue})
                 setSelection('')
             }
         } else {
-            // console.log({currentValue})
             let selectedData = {}
             currentValue?.map(v => {
                 selectedData[v] = true
             })
-            // console.log(selectedData)
             setSelectedValue(selectedData)
             setSelection(currentValue?.join(','))
             setInfo(stateName, currentValue)
@@ -102,7 +89,6 @@ function CheckboxInputComponent({label, setInfo, data, stateName, currentValue})
     }, [currentValue]);
 
 
-    // console.log({selectedValue})
     return (
         <div>
             <ListItem

@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, Stack, TextField, Typography} from "@mui/material";
+import {Box, Button, CircularProgress, Stack, TextField, Typography} from "@mui/material";
 import {useGetFilterDataQuery} from "../store/services/userApi";
 import {useRouter} from "next/router";
 import SearchFilterDialog from "./searchFilterDialog";
 
 const FilterPageLeftBoxComponent = ({filterDetails}) => {
-    const {data: {filters}} = useGetFilterDataQuery()
+    const {data: {filters}, isLoading, isFetching} = useGetFilterDataQuery()
     const [search, setSearch] = useState('');
     const [filterDialog, setFilterDialog] = useState(false);
     const [allFilters, setAllFilters] = useState([]);
@@ -23,10 +23,8 @@ const FilterPageLeftBoxComponent = ({filterDetails}) => {
     }, [filters]);
 
     useEffect(() => {
-        // if (search) {
         const filteredData = filters.filter(v => (v.name.includes(search)))
         setAllFilters(filteredData)
-        // }
     }, [search]);
 
 
@@ -63,32 +61,34 @@ const FilterPageLeftBoxComponent = ({filterDetails}) => {
 
                 </Box>
                 {
-                    allFilters.map(f => {
-                        return <>
-                            {/*<Stack spacing={3} direction='column'>*/}
-                            <Box key={f.id}
-                                 sx={{
-                                     background: '#F4FAFF',
-                                     padding: '13px 14px',
-                                     mb: '16px',
-                                     cursor: 'pointer',
-                                     borderLeft: Number(router.query.selected) === f.id ? '3px solid #47A7FF' : '',
-                                     borderRadius: '5px'
-                                 }}
-                                 onClick={() => selectFilter(f.id)}>
+                    isLoading || isFetching ? <CircularProgress/> :
 
-                                <Typography sx={{fontWeight: 600, fontSize: '14px'}}>
-                                    {f.name}
-                                </Typography>
-                                <Typography sx={{fontWeight: 400, fontSize: '12px'}}>
-                                    {f.transportation_type}
-                                </Typography>
-                                <Typography sx={{fontWeight: 400, fontSize: '10px', color: '#9E9E9E'}}>
-                                    {f.city?.join(',')}
-                                </Typography>
-                            </Box>
-                        </>
-                    })
+                        allFilters.map(f => {
+                            return <>
+                                {/*<Stack spacing={3} direction='column'>*/}
+                                <Box key={f.id}
+                                     sx={{
+                                         background: '#F4FAFF',
+                                         padding: '13px 14px',
+                                         mb: '16px',
+                                         cursor: 'pointer',
+                                         borderLeft: Number(router.query.selected) === f.id ? '3px solid #47A7FF' : '',
+                                         borderRadius: '5px'
+                                     }}
+                                     onClick={() => selectFilter(f.id)}>
+
+                                    <Typography sx={{fontWeight: 600, fontSize: '14px'}}>
+                                        {f.name}
+                                    </Typography>
+                                    <Typography sx={{fontWeight: 400, fontSize: '12px'}}>
+                                        {f.transportation_type}
+                                    </Typography>
+                                    <Typography sx={{fontWeight: 400, fontSize: '10px', color: '#9E9E9E'}}>
+                                        {f.city?.join(',')}
+                                    </Typography>
+                                </Box>
+                            </>
+                        })
                 }
 
             </Box>

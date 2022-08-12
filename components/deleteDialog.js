@@ -8,12 +8,8 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 
 function DeleteDialog({open, setOpen, deleteFilter}) {
-    // const [open, setOpen] = React.useState(show);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-    // console.log(currentValue)
+
 
     const handleClose = () => {
         setOpen(false);

@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {useSearchByFilterQuery} from "../store/services/userApi";
+import React, {useEffect, useState} from 'react';
+import {useGetFilterDataQuery, useSearchByFilterQuery} from "../store/services/userApi";
 import {
     Box,
     Chip,
@@ -10,14 +10,66 @@ import {
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import LinearProgress from "@mui/material/LinearProgress";
+import {useDispatch, useSelector} from "react-redux";
+import {setFilterInfo} from "../store/services/authSlice";
+import {useRouter} from "next/router";
 
 function SearchResultComponent() {
     const [searchData, setSearchData] = useState({
-        search_type: 'search',
-        search_text: ''
+        search_type: '',
+        search_text: '',
+        type: '',
+        city: '',
+        transport_type: '',
+        start_date: '',
+        end_date: '',
+        start_time: '',
+        end_time: '',
     });
+
+    const dispatch = useDispatch()
+    const router = useRouter()
+
+    const {selected, sr} = router.query
+
     const {data, isLoading, isFetching} = useSearchByFilterQuery(searchData)
-    // console.log(isLoading)
+
+    const {data: savedFilters} = useGetFilterDataQuery()
+
+    const {filterInfo} = useSelector(state => state.userInfo)
+    useEffect(() => {
+        if (filterInfo) {
+            setSearchData(state => ({
+                ...state,
+                type: filterInfo.requestType,
+                city: filterInfo.city?.length ? filterInfo.city[0] : '',
+                transport_type: filterInfo.transportationName,
+                start_date: filterInfo.start_date,
+                end_date: filterInfo.end_date,
+                start_time: filterInfo.start_time,
+                end_time: filterInfo.end_time,
+            }))
+        }
+
+    }, [filterInfo]);
+
+    useEffect(() => {
+        if (selected && !sr) {
+            const selectedFilterData = savedFilters?.filters?.find(f => f.id === Number(selected))
+
+            dispatch(setFilterInfo({
+                requestType: selectedFilterData.request_type,
+                city: selectedFilterData.city,
+                transportationName: selectedFilterData.transportation_type
+            }))
+        }
+    }, [router.query]);
+
+
+    const clearChip = (chipProp) => {
+        dispatch(setFilterInfo({...filterInfo, [chipProp]: ''}))
+    }
+
     return (
         <Box>
             <Box display='flex' flexDirection='column'>
@@ -35,7 +87,11 @@ function SearchResultComponent() {
                             sx={{ml: 1, flex: 1, width: '280px',}}
                             placeholder="Search Google Maps"
                             inputProps={{'aria-label': 'search google maps'}}
-                            onChange={(e) => setSearchData(state => ({...state, search_text: e.target.value}))}
+                            onChange={(e) => setSearchData(state => ({
+                                ...state,
+                                search_type: 'search',
+                                search_text: e.target.value
+                            }))}
                         />
                         <IconButton type="submit" sx={{p: '10px'}} aria-label="search">
                             <SearchIcon/>
@@ -45,11 +101,21 @@ function SearchResultComponent() {
                 </Box>
                 <Box sx={{mb: '20px'}}>
                     <Box display='flex' flexWrap='wrap' gap={2}>
-                        <Chip size={'small'} label="Chip Filled" onDelete={() => console.log('aaa')}/>
-                        <Chip size={'small'} label="Chip Filled" onDelete={() => console.log('aaa')}/>
-                        <Chip size={'small'} label="Chip Filled" onDelete={() => console.log('aaa')}/>
-                        <Chip size={'small'} label="Chip Filled" onDelete={() => console.log('aaa')}/>
-                        <Chip size={'small'} label="Chip Filled" onDelete={() => console.log('aaa')}/>
+                        {Object.keys(filterInfo).map(k => {
+                            let chipData = ''
+                            let chipProp = k
+                            if (k === 'city') {
+                                if (filterInfo[k]?.length)
+                                    chipData = filterInfo[k][0]
+                            } else {
+                                if (filterInfo[k])
+                                    chipData = filterInfo[k]
+                            }
+                            if (chipData && k !== 'transportationType' && k !== 'selectedFilter')
+                                return <><Chip size={'small'} label={chipData} onDelete={() => clearChip(chipProp)}/></>
+                        })}
+                        {/*{chips.map(c => <><Chip size={'small'} label={c} onDelete={() => console.log('aaa')}/></>)}*/}
+                        {/*{cityChips.map(c => <><Chip size={'small'} label={c} onDelete={() => console.log('aaa')}/></>)}*/}
                     </Box>
 
                 </Box>

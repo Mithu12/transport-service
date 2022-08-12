@@ -39,10 +39,12 @@ export default function SelectInputComponent({label, values, stateName, setInfo,
     }
 
     useEffect(() => {
-        setSelectedValue(currentValue)
-        const s = values.find(v => v.id === currentValue)
-        setSelection(s?.title ? s.title : s?.name)
-        setInfo(stateName, currentValue)
+        if (currentValue) {
+            setSelectedValue(currentValue)
+            const s = values.find(v => v.id === currentValue)
+            setSelection(s?.title ? s.title : s?.name)
+            setInfo(stateName, currentValue, s?.title)
+        }
     }, [currentValue]);
 
 

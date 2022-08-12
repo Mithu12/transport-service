@@ -9,7 +9,7 @@ import SearchResultComponent from "./searchResultComponent";
 function FilterPageRightBoxComponent({}) {
     const router = useRouter()
 
-    const {manage, selected, newF, result} = router.query
+    const {manage, selected, newF, result, sr} = router.query
     console.log(manage, selected)
 
     const closeFilterCreate = () => {
@@ -35,7 +35,7 @@ function FilterPageRightBoxComponent({}) {
                     </Box>
                 </Box> : ''}
             {manage && selected ? <FilterDetailsComponent filter={selected}/> : ''}
-            {result && selected ? <SearchResultComponent filter={selected}/> : ''}
+            {result && (selected || sr) ? <SearchResultComponent filter={selected}/> : ''}
             {newF ? <CreateFavouriteFilterComponent closeFilterCreate={closeFilterCreate}/> : ''}
             {
                 !manage && !newF && !result && <FavouriteFilterListComponent addFilter={openFilterCreate}/>

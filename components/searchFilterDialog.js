@@ -8,46 +8,63 @@ import SelectInputComponent from "./selectInputComponent";
 import DialogActions from "@mui/material/DialogActions";
 import {useRouter} from "next/router";
 import {useGetFilterDataQuery} from "../store/services/userApi";
+import DateSelectionComponent from "./dateSelectionComponent";
+import {setFilterInfo} from "../store/services/authSlice";
+import {useDispatch, useSelector} from "react-redux";
 
 function SearchFilterDialog({handleClose, show}) {
-
-    const [filterData, setFilterData] = useState({
+    const initialState = {
         selectedFilter: '',
-        title: '',
         requestType: '',
         transportationType: '',
         city: [],
-    });
-
+        start_date: '',
+        end_date: '',
+        start_time: '',
+        end_time: '',
+    }
+    const [filterData, setFilterData] = useState(initialState);
 
     const router = useRouter()
+    const dispatch = useDispatch()
+
+    const {filterInfo} = useSelector(state => state.userInfo)
 
 
     const allRequestType = ['Simple Delivery', 'Advanced Delivery']
+
     const {data} = useGetFilterDataQuery()
 
-    const setInfo = (name, data) => {
-        setFilterData(state => ({...state, [name]: data}))
+    const setInfo = (name, data, title) => {
+        if (title)
+            setFilterData(state => ({...state, [name]: data, transportationName: title}))
+        else
+            setFilterData(state => ({...state, [name]: data}))
     }
-    // console.log(filterData)
     const modalSubmitHandle = () => {
+        dispatch(setFilterInfo(filterData))
+        handleClose()
         router.push({
-            query: {result: 1}
-        })
-        ;
+            query: {result: 1, sr: 1}
+        });
     };
 
     useEffect(() => {
         const selected = data.filters.find(d => d.id === filterData.selectedFilter)
-
-        setFilterData(state => ({
-            ...state,
-            requestType: selected.request_type,
-            transportationType: selected.typeoftransportations_id,
-            city: selected.city,
-        }))
+        if (selected)
+            setFilterData(state => ({
+                ...state,
+                requestType: selected.request_type,
+                transportationType: selected.typeoftransportations_id,
+                city: selected.city,
+            }))
 
     }, [filterData.selectedFilter]);
+
+    useEffect(() => {
+        if (filterData)
+            setFilterData(initialState)
+    }, [filterInfo]);
 
 
     return (
@@ -72,10 +89,7 @@ function SearchFilterDialog({handleClose, show}) {
                                                       values={data.filters}
                                                       label={'Select Saved Filter'} setInfo={setInfo}/>
                             </Box>
-
                         </Box>
-
-
                         <Box display='flex' justifyContent='center'>
                             <Typography
                                 sx={{
@@ -98,7 +112,6 @@ function SearchFilterDialog({handleClose, show}) {
                                                         data={allRequestType}/>
                             </Box>
 
-                            {/*</List>*/}
                             <Box sx={{mb: '20px'}}>
                                 <SelectInputComponent stateName='transportationType'
                                                       values={data.transportation_types}
@@ -115,6 +128,23 @@ function SearchFilterDialog({handleClose, show}) {
                             </Box>
 
 
+                        </Box>
+                        <Box sx={{mb: '20px', width: '100%'}} display={'flex'} justifyContent='space-between'
+                             flexWrap='wrap'>
+
+                            {/* selectionType = 0 for Date Icon and selectionType = 1 for Time Icon */}
+                            <DateSelectionComponent currentValue={filterData.start_date}
+                                                    setInfo={setInfo} label='Start Date' stateName='start_date'
+                                                    selectionType={0}/>
+                            <DateSelectionComponent currentValue={filterData.end_date}
+                                                    setInfo={setInfo} label='End Date' stateName='end_date'
+                                                    selectionType={0}/>
+                            <DateSelectionComponent currentValue={filterData.start_time}
+                                                    setInfo={setInfo} label='Start Time' stateName='start_time'
+                                                    selectionType={1}/>
+                            <DateSelectionComponent currentValue={filterData.end_time}
+                                                    setInfo={setInfo} label='End Time' stateName='end_time'
+                                                    selectionType={1}/>
                         </Box>
                     </DialogContent>
                     <DialogActions sx={{justifyContent: 'center'}}>

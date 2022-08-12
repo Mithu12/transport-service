@@ -6,7 +6,7 @@ import {useGetFilterDataQuery} from "../store/services/userApi";
 FavouriteFilterListComponent.propTypes = {};
 
 function FavouriteFilterListComponent({addFilter}) {
-    // const filters = null
+
     const {data: {filters}} = useGetFilterDataQuery()
 
     return (
